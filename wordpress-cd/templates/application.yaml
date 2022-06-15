@@ -1,0 +1,23 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: {{ .Release.Name }}-app
+  namespace: argocd
+  finalizers:
+  - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  source:
+    repoURL: https://github.com/koki-develop/wordpress-on-k8s-with-helm-example.git
+    path: wordpress
+    helm:
+      parameters:
+      - name: "db.rootPassword"
+        value: {{ .Values.db.rootPassword | quote }}
+      - name: "db.password"
+        value: {{ .Values.db.password | quote }}
+  syncPolicy:
+    automated: {}

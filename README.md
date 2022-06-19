@@ -2,24 +2,17 @@
 # クラスターを作成
 $ kind create cluster --config ./kind.yaml
 
-# Ingress NGINX をインストール
-$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
-$ kubectl wait --namespace ingress-nginx \
-  --for=condition=ready pod \
-  --selector=app.kubernetes.io/component=controller \
-  --timeout=90s
-
 # Argo CD をインストール
 $ kubectl create namespace argocd
 $ helm repo add argo https://argoproj.github.io/argo-helm
 $ helm install argocd argo/argo-cd --namespace argocd
 
-# Argo CD UI にアクセス
+# Argo CD API サーバーにアクセス
 # http://localhost:8080 からアクセスできる
 $ kubectl port-forward -n argocd svc/argocd-server 8080:443
 
 # 管理者アカウントの初期パスワードを取得
-$ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d
+$ kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath='{.data.password}' | base64 -d; echo
 
 # ログイン
 $ argocd login localhost:8080

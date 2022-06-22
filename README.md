@@ -24,8 +24,8 @@ $ argocd account update-password
 $ kubectl -n argocd delete secrets/argocd-initial-admin-secret
 
 # アプリケーションを作成
-# 暫く待つと http://localhost から Wordpress にアクセスできる
-$ helm install -n argocd wordpress-cd ./wordpress-cd
+# しばらく待つと nginx の Pod が起動する
+$ helm install -n argocd sample-app-cd ./sample-app-cd
 
 # 後片付け
 $ kind delete cluster
